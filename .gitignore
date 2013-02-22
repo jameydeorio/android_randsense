@@ -1,0 +1,39 @@
+# Ignore build files
+local.properties
+version.properties
+proguard.cfg
+
+# Ignore compiled python
+*.pyc
+
+# Ignore generated files
+gen/
+coverage/
+reports/
+*.em
+out/
+build.xml
+
+# Ignore .class files
+*.class
+
+# Ignore editor files
+.settings/
+.classpath
+*.swp
+default.properties
+proguard-project.txt
+ant.properties
+.idea/workspace.xml
+
+# Ignore binary files
+bin/
+
+# Ignore assets
+*.tar
+
+# Ignore system files
+.DS_Store
+
+# Ignore IntelliJ files
+.idea/codeStyleSettings.xml
