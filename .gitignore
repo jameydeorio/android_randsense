@@ -24,7 +24,6 @@ build.xml
 default.properties
 proguard-project.txt
 ant.properties
-.idea/workspace.xml
 
 # Ignore binary files
 bin/
@@ -36,4 +35,4 @@ bin/
 .DS_Store
 
 # Ignore IntelliJ files
-.idea/codeStyleSettings.xml
+.idea

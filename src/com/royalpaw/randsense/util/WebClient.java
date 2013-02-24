@@ -3,6 +3,7 @@ package com.royalpaw.randsense.util;
 import android.app.Activity;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.widget.Button;
 import android.widget.TextView;
 import com.royalpaw.randsense.R;
 import org.json.JSONException;
@@ -31,6 +32,12 @@ public class WebClient {
 
         FetchSentenceJSON(Activity activity) {
             mActivity = activity;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            Button button = (Button)mActivity.findViewById(R.id.sentence_button);
+            button.setEnabled(false);
         }
 
         @Override
@@ -71,6 +78,9 @@ public class WebClient {
         protected void onPostExecute(String newSentence) {
             TextView textView = (TextView)mActivity.findViewById(R.id.sentence);
             textView.setText(newSentence);
+
+            Button button = (Button)mActivity.findViewById(R.id.sentence_button);
+            button.setEnabled(true);
         }
     }
 }
