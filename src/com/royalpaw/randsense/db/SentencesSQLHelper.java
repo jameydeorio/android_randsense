@@ -23,10 +23,10 @@ public class SentencesSQLHelper extends SQLiteOpenHelper {
     private static final int DATABASE_VERSION = 1;
 
     private static final String DATABASE_CREATE = "create table " + TABLE_SENTENCES + "("
-            + COLUMN_ID + "integer primary key autoincrement, "
-            + COLUMN_PK + "integer not null, "
-            + COLUMN_SENTENCE + "text not null, "
-            + COLUMN_IS_FAVORITE + "boolean not null default 0";
+            + COLUMN_ID + " integer primary key autoincrement, "
+            + COLUMN_PK + " integer not null, "
+            + COLUMN_SENTENCE + " text not null, "
+            + COLUMN_IS_FAVORITE + " boolean not null default 0);";
 
     public SentencesSQLHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);

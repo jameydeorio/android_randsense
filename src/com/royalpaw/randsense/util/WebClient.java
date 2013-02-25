@@ -1,17 +1,25 @@
 package com.royalpaw.randsense.util;
 
 import android.app.Activity;
+import android.app.ListActivity;
+import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.TextView;
 import com.royalpaw.randsense.R;
+import com.royalpaw.randsense.db.Sentence;
+import com.royalpaw.randsense.db.SentencesDataSource;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import javax.sql.DataSource;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.lang.reflect.Array;
 import java.net.MalformedURLException;
 import java.net.URL;
 
@@ -23,25 +31,31 @@ import java.net.URL;
 public class WebClient {
     private static final String TAG = "WebClient";
 
-    public void getNewSentence(Activity activity) {
-        new FetchSentenceJSON(activity).execute();
+    private Context mContext;
+
+    public WebClient(Context context) {
+        this.mContext = context;
     }
 
-    private static class FetchSentenceJSON extends AsyncTask<Void, Void, String> {
+    public void getNewSentence() {
+        new FetchSentence(mContext).execute();
+    }
+
+    private static class FetchSentence extends AsyncTask<Void, Void, JSONObject> {
         private static Activity mActivity;
 
-        FetchSentenceJSON(Activity activity) {
-            mActivity = activity;
+        FetchSentence(Context context) {
+            mActivity = (Activity) context;
         }
 
         @Override
         protected void onPreExecute() {
-            Button button = (Button)mActivity.findViewById(R.id.sentence_button);
+            Button button = (Button) mActivity.findViewById(R.id.sentence_button);
             button.setEnabled(false);
         }
 
         @Override
-        protected String doInBackground(Void... voids) {
+        protected JSONObject doInBackground(Void... voids) {
             String finalString = "";
             URL url;
             StringBuilder sb = new StringBuilder();
@@ -65,8 +79,8 @@ public class WebClient {
             }
 
             try {
-                JSONObject json = new JSONObject(sb.toString());
-                return json.getString("sentence");
+                JSONObject sentenceJSON = new JSONObject(sb.toString());
+                return sentenceJSON;
             } catch (JSONException e) {
                 Log.e(TAG, "JSONException while getting sentence from response", e);
             }
@@ -75,12 +89,33 @@ public class WebClient {
         }
 
         @Override
-        protected void onPostExecute(String newSentence) {
-            TextView textView = (TextView)mActivity.findViewById(R.id.sentence);
+        protected void onPostExecute(JSONObject sentenceJSON) {
+            String newSentence;
+            long newPk;
+
+            try {
+                newSentence = sentenceJSON.getString("sentence");
+                newPk = sentenceJSON.getInt("pk");
+            } catch (JSONException e) {
+                Log.e(TAG, "JSONException while grabbing sentence and pk: ", e);
+                return;
+            }
+
+            TextView textView = (TextView) mActivity.findViewById(R.id.sentence);
             textView.setText(newSentence);
 
-            Button button = (Button)mActivity.findViewById(R.id.sentence_button);
+            SentencesDataSource dataSource = new SentencesDataSource(mActivity);
+            dataSource.open();
+            Sentence sentenceObject = dataSource.createSentence(newSentence, newPk);
+            dataSource.close();
+
+            Button button = (Button) mActivity.findViewById(R.id.sentence_button);
             button.setEnabled(true);
+
+            ListView listView = (ListView) mActivity.findViewById(android.R.id.list);
+            ArrayAdapter<Sentence> adapter = (ArrayAdapter<Sentence>) listView.getAdapter();
+            adapter.insert(sentenceObject, 0);
+            adapter.notifyDataSetChanged();
         }
     }
 }

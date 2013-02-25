@@ -39,9 +39,10 @@ public class SentencesDataSource {
         dbHelper.close();
     }
 
-    public Sentence createSentence(String sentence) {
+    public Sentence createSentence(String sentence, long pk) {
         ContentValues values = new ContentValues();
         values.put(SentencesSQLHelper.COLUMN_SENTENCE, sentence);
+        values.put(SentencesSQLHelper.COLUMN_PK, pk);
         long insertId = database.insert(SentencesSQLHelper.TABLE_SENTENCES, null, values);
         Cursor cursor = database.query(
                 SentencesSQLHelper.TABLE_SENTENCES,
@@ -60,7 +61,7 @@ public class SentencesDataSource {
         Log.i(TAG, "Sentence deleted with id " + id);
         database.delete(
                 SentencesSQLHelper.TABLE_SENTENCES,
-                SentencesSQLHelper.COLUMN_ID + " = " id,
+                SentencesSQLHelper.COLUMN_ID + " = " + id,
                 null
         );
     }
@@ -71,7 +72,7 @@ public class SentencesDataSource {
         Cursor cursor = database.query(
                 SentencesSQLHelper.TABLE_SENTENCES,
                 allColumns,
-                null, null, null, null, null
+                null, null, null, null, "pk desc"
         );
 
         cursor.moveToFirst();
