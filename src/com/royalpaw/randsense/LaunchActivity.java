@@ -5,6 +5,8 @@ import android.app.ListActivity;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
@@ -43,6 +45,13 @@ public class LaunchActivity extends Activity
         ListView listView = (ListView) findViewById(R.id.sentences_list);
         listView.setAdapter(adapter);
         dataSource.close();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.main_menu, menu);
+        return true;
     }
 
     public void onClick(View view) {
