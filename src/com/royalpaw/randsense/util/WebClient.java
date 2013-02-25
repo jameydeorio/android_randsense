@@ -112,7 +112,7 @@ public class WebClient {
             Button button = (Button) mActivity.findViewById(R.id.sentence_button);
             button.setEnabled(true);
 
-            ListView listView = (ListView) mActivity.findViewById(android.R.id.list);
+            ListView listView = (ListView) mActivity.findViewById(R.id.sentences_list);
             ArrayAdapter<Sentence> adapter = (ArrayAdapter<Sentence>) listView.getAdapter();
             adapter.insert(sentenceObject, 0);
             adapter.notifyDataSetChanged();

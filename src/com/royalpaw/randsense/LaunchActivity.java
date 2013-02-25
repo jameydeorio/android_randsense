@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 import com.royalpaw.randsense.db.Sentence;
 import com.royalpaw.randsense.db.SentencesDataSource;
@@ -21,7 +22,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
 
-public class LaunchActivity extends ListActivity
+public class LaunchActivity extends Activity
 {
     private static final String TAG = "LaunchActivity";
 
@@ -37,9 +38,10 @@ public class LaunchActivity extends ListActivity
         dataSource = new SentencesDataSource(this);
         dataSource.open();
 
-        List<Sentence> values = dataSource.getAllSentences();
-        ArrayAdapter<Sentence> adapter = new ArrayAdapter<Sentence>(this, android.R.layout.simple_list_item_1, values);
-        setListAdapter(adapter);
+        List<Sentence> sentences = dataSource.getAllSentences();
+        ArrayAdapter<Sentence> adapter = new ArrayAdapter<Sentence>(this, android.R.layout.simple_list_item_1, sentences);
+        ListView listView = (ListView) findViewById(R.id.sentences_list);
+        listView.setAdapter(adapter);
         dataSource.close();
     }
 
