@@ -2,10 +2,12 @@ package com.royalpaw.randsense;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import com.royalpaw.randsense.db.Sentence;
@@ -18,23 +20,25 @@ public class LaunchActivity extends Activity
 {
     private static final String TAG = "LaunchActivity";
 
-    private SentencesDataSource dataSource;
+    private SentencesDataSource mDataSource;
 
-    /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
 
-        dataSource = new SentencesDataSource(this);
-        dataSource.open();
+        ListView sentencesList = (ListView) findViewById(R.id.sentences_list);
+        registerForContextMenu(sentencesList);
 
-        List<Sentence> sentences = dataSource.getAllSentences();
+        mDataSource = new SentencesDataSource(this);
+        mDataSource.open();
+
+        List<Sentence> sentences = mDataSource.getAllSentences();
         ArrayAdapter<Sentence> adapter = new ArrayAdapter<Sentence>(this, android.R.layout.simple_list_item_1, sentences);
         ListView listView = (ListView) findViewById(R.id.sentences_list);
         listView.setAdapter(adapter);
-        dataSource.close();
+        mDataSource.close();
     }
 
     @Override
@@ -48,17 +52,58 @@ public class LaunchActivity extends Activity
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.delete_all:
-                dataSource.open();
-                dataSource.deleteAllSentences();
-                dataSource.close();
-                ListView listView = (ListView) findViewById(R.id.sentences_list);
-                ArrayAdapter<Sentence> adapter = (ArrayAdapter<Sentence>) listView.getAdapter();
+                deleteAllSentences();
+                ArrayAdapter<Sentence> adapter = getSentenceAdapter();
                 adapter.clear();
                 adapter.notifyDataSetChanged();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View view, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, view, menuInfo);
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.sentence_context_menu, menu);
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+        switch (item.getItemId()) {
+            case R.id.favorite_sentence:
+                return true;
+            case R.id.tweet_sentence:
+                return true;
+            case R.id.delete_sentence:
+                ArrayAdapter<Sentence> adapter = getSentenceAdapter();
+                Sentence sentence = adapter.getItem(info.position);
+                deleteSentence(sentence);
+                adapter.remove(sentence);
+                adapter.notifyDataSetChanged();
+                return true;
+            default:
+                return super.onContextItemSelected(item);
+        }
+    }
+
+    private void deleteAllSentences() {
+        mDataSource.open();
+        mDataSource.deleteAllSentences();
+        mDataSource.close();
+    }
+
+    private void deleteSentence(Sentence sentence) {
+        mDataSource.open();
+        mDataSource.deleteSentence(sentence);
+        mDataSource.close();
+    }
+
+    private ArrayAdapter<Sentence> getSentenceAdapter() {
+        ListView listView = (ListView) findViewById(R.id.sentences_list);
+        return (ArrayAdapter<Sentence>) listView.getAdapter();
     }
 
     public void onClick(View view) {

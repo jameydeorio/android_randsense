@@ -56,16 +56,6 @@ public class SentencesDataSource {
         return newSentence;
     }
 
-    public void deleteSentence(Sentence sentence) {
-        long id = sentence.getId();
-        Log.i(TAG, "Sentence deleted with id " + id);
-        database.delete(
-                SentencesSQLHelper.TABLE_SENTENCES,
-                SentencesSQLHelper.COLUMN_ID + " = " + id,
-                null
-        );
-    }
-
     public List<Sentence> getAllSentences() {
         List<Sentence> sentences = new ArrayList<Sentence>();
 
@@ -88,6 +78,16 @@ public class SentencesDataSource {
 
     public void deleteAllSentences() {
         database.delete(SentencesSQLHelper.TABLE_SENTENCES, null, null);
+    }
+
+    public void deleteSentence(Sentence sentence) {
+        long id = sentence.getId();
+        Log.i(TAG, "Sentence deleted with id " + id);
+        database.delete(
+                SentencesSQLHelper.TABLE_SENTENCES,
+                SentencesSQLHelper.COLUMN_ID + " = " + id,
+                null
+        );
     }
 
     private Sentence cursorToSentence(Cursor cursor) {

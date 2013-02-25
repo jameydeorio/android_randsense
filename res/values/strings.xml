@@ -3,4 +3,9 @@
     <string name="app_name">RandSense</string>
 
     <string name="generate_button">New Sentence</string>
+
+    <!-- Sentence context menu -->
+    <string name="favorite_sentence">Favorite sentence</string>
+    <string name="tweet_sentence">Tweet sentence</string>
+    <string name="delete_sentence">Delete sentence</string>
 </resources>
