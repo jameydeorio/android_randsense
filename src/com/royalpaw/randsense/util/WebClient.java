@@ -1,7 +1,6 @@
 package com.royalpaw.randsense.util;
 
 import android.app.Activity;
-import android.app.ListActivity;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
@@ -15,11 +14,9 @@ import com.royalpaw.randsense.db.SentencesDataSource;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import javax.sql.DataSource;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.lang.reflect.Array;
 import java.net.MalformedURLException;
 import java.net.URL;
 
