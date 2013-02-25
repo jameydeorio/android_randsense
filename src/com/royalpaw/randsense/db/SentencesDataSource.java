@@ -86,6 +86,10 @@ public class SentencesDataSource {
         return sentences;
     }
 
+    public void deleteAllSentences() {
+        database.delete(SentencesSQLHelper.TABLE_SENTENCES, null, null);
+    }
+
     private Sentence cursorToSentence(Cursor cursor) {
         Sentence sentence = new Sentence();
         sentence.setId(cursor.getLong(0));

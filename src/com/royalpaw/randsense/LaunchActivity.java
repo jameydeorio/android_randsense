@@ -1,27 +1,17 @@
 package com.royalpaw.randsense;
 
 import android.app.Activity;
-import android.app.ListActivity;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.ListAdapter;
 import android.widget.ListView;
-import android.widget.TextView;
 import com.royalpaw.randsense.db.Sentence;
 import com.royalpaw.randsense.db.SentencesDataSource;
-import com.royalpaw.randsense.util.Constants;
 import com.royalpaw.randsense.util.WebClient;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.List;
 
 public class LaunchActivity extends Activity
@@ -52,6 +42,23 @@ public class LaunchActivity extends Activity
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.main_menu, menu);
         return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.delete_all:
+                dataSource.open();
+                dataSource.deleteAllSentences();
+                dataSource.close();
+                ListView listView = (ListView) findViewById(R.id.sentences_list);
+                ArrayAdapter<Sentence> adapter = (ArrayAdapter<Sentence>) listView.getAdapter();
+                adapter.clear();
+                adapter.notifyDataSetChanged();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     public void onClick(View view) {
