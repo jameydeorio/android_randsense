@@ -6,6 +6,7 @@
 
     <!-- Sentence context menu -->
     <string name="favorite_sentence">Favorite sentence</string>
-    <string name="tweet_sentence">Tweet sentence</string>
     <string name="delete_sentence">Delete sentence</string>
+    <string name="share_sentence">Share sentence</string>
+    <string name="share_sentence_intent_heading">Share sentence via...</string>
 </resources>

@@ -1,6 +1,7 @@
 package com.royalpaw.randsense;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.ContextMenu;
 import android.view.Menu;
@@ -69,21 +70,33 @@ public class LaunchActivity extends Activity
     @Override
     public boolean onContextItemSelected(MenuItem item) {
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+        ArrayAdapter<Sentence> adapter = getSentenceAdapter();
+        Sentence sentence = adapter.getItem(info.position);
+
         switch (item.getItemId()) {
             case R.id.favorite_sentence:
                 return true;
-            case R.id.tweet_sentence:
-                return true;
             case R.id.delete_sentence:
-                ArrayAdapter<Sentence> adapter = getSentenceAdapter();
-                Sentence sentence = adapter.getItem(info.position);
                 deleteSentence(sentence);
                 adapter.remove(sentence);
                 adapter.notifyDataSetChanged();
                 return true;
+            case R.id.share_sentence:
+                shareSentence(sentence);
             default:
                 return super.onContextItemSelected(item);
         }
+    }
+
+    private void shareSentence(Sentence sentence) {
+        // TODO: Figure out how to discern which service is chosen,
+        // so we can add arbitrary stuff, like hash tags for Twitter
+        String message = sentence.toString();
+        Intent shareIntent = new Intent();
+        shareIntent.setAction(Intent.ACTION_SEND);
+        shareIntent.putExtra(Intent.EXTRA_TEXT, message);
+        shareIntent.setType("text/plain");
+        startActivity(Intent.createChooser(shareIntent, getString(R.string.share_sentence_intent_heading)));
     }
 
     private void deleteAllSentences() {
