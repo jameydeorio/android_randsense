@@ -32,13 +32,10 @@ public class LaunchActivity extends Activity
         registerForContextMenu(sentencesList);
 
         mDataSource = new SentencesDataSource(this);
-        mDataSource.open();
-
         List<Sentence> sentences = mDataSource.getAllSentences();
         ArrayAdapter<Sentence> adapter = new ArrayAdapter<Sentence>(this, android.R.layout.simple_list_item_1, sentences);
         ListView listView = (ListView) findViewById(R.id.sentences_list);
         listView.setAdapter(adapter);
-        mDataSource.close();
     }
 
     @Override
@@ -90,15 +87,11 @@ public class LaunchActivity extends Activity
     }
 
     private void deleteAllSentences() {
-        mDataSource.open();
         mDataSource.deleteAllSentences();
-        mDataSource.close();
     }
 
     private void deleteSentence(Sentence sentence) {
-        mDataSource.open();
         mDataSource.deleteSentence(sentence);
-        mDataSource.close();
     }
 
     private ArrayAdapter<Sentence> getSentenceAdapter() {

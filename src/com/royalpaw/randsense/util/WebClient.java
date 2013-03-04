@@ -102,9 +102,7 @@ public class WebClient {
             textView.setText(newSentence);
 
             SentencesDataSource dataSource = new SentencesDataSource(mActivity);
-            dataSource.open();
             Sentence sentenceObject = dataSource.createSentence(newSentence, newPk);
-            dataSource.close();
 
             Button button = (Button) mActivity.findViewById(R.id.sentence_button);
             button.setEnabled(true);

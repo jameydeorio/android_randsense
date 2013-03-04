@@ -40,6 +40,8 @@ public class SentencesDataSource {
     }
 
     public Sentence createSentence(String sentence, long pk) {
+        this.open();
+
         ContentValues values = new ContentValues();
         values.put(SentencesSQLHelper.COLUMN_SENTENCE, sentence);
         values.put(SentencesSQLHelper.COLUMN_PK, pk);
@@ -52,11 +54,16 @@ public class SentencesDataSource {
         );
         cursor.moveToFirst();
         Sentence newSentence = cursorToSentence(cursor);
+
         cursor.close();
+        this.close();
+
         return newSentence;
     }
 
     public List<Sentence> getAllSentences() {
+        this.open();
+
         List<Sentence> sentences = new ArrayList<Sentence>();
 
         Cursor cursor = database.query(
@@ -73,14 +80,19 @@ public class SentencesDataSource {
         }
 
         cursor.close();
+        this.close();
+
         return sentences;
     }
 
     public void deleteAllSentences() {
+        this.open();
         database.delete(SentencesSQLHelper.TABLE_SENTENCES, null, null);
+        this.close();
     }
 
     public void deleteSentence(Sentence sentence) {
+        this.open();
         long id = sentence.getId();
         Log.i(TAG, "Sentence deleted with id " + id);
         database.delete(
@@ -88,6 +100,7 @@ public class SentencesDataSource {
                 SentencesSQLHelper.COLUMN_ID + " = " + id,
                 null
         );
+        this.close();
     }
 
     private Sentence cursorToSentence(Cursor cursor) {
