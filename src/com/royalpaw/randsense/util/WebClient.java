@@ -1,6 +1,7 @@
 package com.royalpaw.randsense.util;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
@@ -40,6 +41,7 @@ public class WebClient {
 
     private static class FetchSentence extends AsyncTask<Void, Void, JSONObject> {
         private static Activity mActivity;
+        private ProgressDialog mProgress;
 
         FetchSentence(Context context) {
             mActivity = (Activity) context;
@@ -49,6 +51,11 @@ public class WebClient {
         protected void onPreExecute() {
             Button button = (Button) mActivity.findViewById(R.id.sentence_button);
             button.setEnabled(false);
+
+            mProgress = new ProgressDialog(mActivity);
+            mProgress.setTitle(mActivity.getString(R.string.fetch_sentence_heading));
+            mProgress.setMessage(mActivity.getString(R.string.fetch_sentence_message));
+            mProgress.show();
         }
 
         @Override
@@ -111,6 +118,8 @@ public class WebClient {
             ArrayAdapter<Sentence> adapter = (ArrayAdapter<Sentence>) listView.getAdapter();
             adapter.insert(sentenceObject, 0);
             adapter.notifyDataSetChanged();
+
+            mProgress.dismiss();
         }
     }
 }

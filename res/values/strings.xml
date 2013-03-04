@@ -5,8 +5,12 @@
     <string name="generate_button">New Sentence</string>
 
     <!-- Sentence context menu -->
-    <string name="favorite_sentence">Favorite sentence</string>
-    <string name="delete_sentence">Delete sentence</string>
-    <string name="share_sentence">Share sentence</string>
     <string name="share_sentence_intent_heading">Share sentence via...</string>
+    <string name="share_sentence">Share sentence</string>
+    <string name="favorite_sentence">Add to favorites</string>
+    <string name="delete_sentence">Delete sentence</string>
+
+    <!-- Loading sentence -->
+    <string name="fetch_sentence_heading">Fetching Sentence</string>
+    <string name="fetch_sentence_message">Creating and fetching sentence from the server</string>
 </resources>
